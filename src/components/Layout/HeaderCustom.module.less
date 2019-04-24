@@ -1,0 +1,61 @@
+@headerH: 62px;
+.header {
+  padding: 0;
+  box-shadow: 4px 4px 40px 0 rgba(0, 0, 0, .05);
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  height: @headerH;
+  z-index: 9;
+  align-items: center;
+  background-color: #fff;
+
+  .button {
+    height: @headerH;
+    line-height: @headerH;
+    padding: 0 24px;
+    transition: color .3s, background-color .3s;
+    cursor: pointer;
+
+    &:hover {
+      color: #1890ff;
+      background-color: #f9f9fc;
+    }
+
+    .trigger {
+      font-size: 18px;
+    }
+  }
+
+  .right-container {
+    display: flex;
+    align-items: center;
+  }
+
+  :global {
+    .ant-menu {
+      height: @headerH;
+      border-bottom: none;
+    }
+
+    .ant-menu-submenu-title {
+      height: @headerH;
+    }
+
+    .ant-menu-horizontal {
+      line-height: @headerH;
+
+      > .ant-menu-submenu {
+        top: 0;
+        margin-top: 0;
+        border-bottom: none;
+
+        &:hover {
+          color: #1890ff;
+          background-color: #f9f9fc;
+          border-bottom: none;
+        }
+      }
+    }
+  }
+}
