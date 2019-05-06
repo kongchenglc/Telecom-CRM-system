@@ -69,7 +69,7 @@ class App extends React.Component {
           <Provider rootStore={rootStore}>
             <Router>
               <Switch>
-                <Route exact path='/' render={() => <Redirect to={`${config.adminBasePath}/dashboard`} push/>}/>
+                <Route exact path='/' render={() => <Redirect to={`${config.adminBasePath}/userDataMgt`} push/>}/>
                 <Route path='/login' component={Login}/>
                 <Route path={config.adminBasePath} component={Main}/>
                 <Route component={NotFound}/>

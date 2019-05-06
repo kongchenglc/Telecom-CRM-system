@@ -87,15 +87,6 @@ class Main extends Component {
             onCollapseChange={this.onCollapseChange}
             onSignOut={this.onSignOut}/>
           <Breadcrumb style={{margin: '15px 16px'}}>
-            {
-              location.pathname !== '/app/dashboard' &&
-              <Breadcrumb.Item>
-                <Link to='/app/dashboard' className='breadcrumb-link'>
-                  <Icon type='dashboard'/>
-                  <span>Dashboard</span>
-                </Link>
-              </Breadcrumb.Item>
-            }
             {this._breadcrumbList.map((item, index) => {
               return (
                 <Breadcrumb.Item key={index}>
