@@ -1,29 +1,30 @@
-import React, {Component} from 'react'
-import {observer} from 'mobx-react'
-import { Table, Tag, Button, Divider} from 'antd'
+import React, { Component } from 'react'
+import { observer } from 'mobx-react'
+import { Table, Tag, Divider } from 'antd'
 import styles from './userDataMgt.module.less'
+import axios from 'axios'
 
 
 const columns = [{
-  title: 'Name',
+  title: '姓名',
   dataIndex: 'name',
   key: 'name',
   render: text => <a href="javascript:;">{text}</a>,
 }, {
-  title: 'Age',
-  dataIndex: 'age',
-  key: 'age',
+  title: '电话号码',
+  dataIndex: 'phoneNum',
+  key: 'phoneNum',
 }, {
-  title: 'Address',
+  title: '地址',
   dataIndex: 'address',
   key: 'address',
 }, {
-  title: 'Tags',
-  key: 'tags',
-  dataIndex: 'tags',
-  render: tags => (
+  title: '身份证号',
+  key: 'personId',
+  dataIndex: 'personId',
+  render: personId => (
     <span>
-      {tags.map(tag => {
+      {personId.map(tag => {
         let color = tag.length > 5 ? 'geekblue' : 'green';
         if (tag === 'loser') {
           color = 'volcano';
@@ -33,13 +34,19 @@ const columns = [{
     </span>
   ),
 }, {
-  title: 'Action',
+  title: '创建时间',
+  dataIndex: 'createTime',
+  key: 'createTime',
+}, {
+  title: '操作',
   key: 'action',
   render: (text, record) => (
     <span>
       <a href="javascript:;">Invite {record.name}</a>
       <Divider type="vertical" />
-      <a href="javascript:;">Delete</a>
+      <a href="javascript:;" onClick={() => { console.log(record) }}>详情</a>
+      <Divider type="vertical" />
+      <a href="javascript:;" onClick={() => { console.log('delete') }}>删除</a>
     </span>
   ),
 }];
@@ -47,21 +54,21 @@ const columns = [{
 const data = [{
   key: '1',
   name: 'John Brown',
-  age: 32,
+  phoneNum: 32,
   address: 'New York No. 1 Lake Park',
-  tags: ['nice', 'developer'],
+  personId: ['nice', 'developer'],
 }, {
   key: '2',
   name: 'Jim Green',
-  age: 42,
+  phoneNum: 42,
   address: 'London No. 1 Lake Park',
-  tags: ['loser'],
+  personId: ['loser'],
 }, {
   key: '3',
   name: 'Joe Black',
-  age: 32,
+  phoneNum: 32,
   address: 'Sidney No. 1 Lake Park',
-  tags: ['cool', 'teacher'],
+  personId: ['cool', 'teacher'],
 }];
 
 
@@ -79,9 +86,24 @@ class userDataMgt extends Component {
       //     Link to profile
       //   </Button>
       // </div>
-      
+
       <div>
         <Table columns={columns} dataSource={data} />
+        <a href="javascript:;" onClick={() => {
+          axios({
+            method: 'post',
+            url: 'http://127.0.0.1:8888/test/test',
+            data: {
+              sNumber: '11111',
+              sPassword: '2222',
+              checkcode: '33333',
+            }
+          }).then((result) => {
+
+          }).catch(err => {
+            console.log(err);
+          })
+        }}>testButton</a>
       </div>
     )
   }

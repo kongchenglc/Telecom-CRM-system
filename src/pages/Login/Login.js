@@ -20,7 +20,7 @@ class Login extends PureComponent {
       }
       const result = await Api.login(values, {mock: true})
       setToken(result.token)
-      this.props.history.replace('/app/userDataMgt')
+      this.props.history.replace('/app/dashboard')
     })
   }
 
