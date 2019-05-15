@@ -20,24 +20,11 @@ const columns = [{
   title: '结束时间',
   key: 'endTime',
   dataIndex: 'endTime',
-  render: endTime => (
-    <span>
-      {endTime.map(tag => {
-        let color = tag.length > 5 ? 'geekblue' : 'green';
-        if (tag === 'loser') {
-          color = 'volcano';
-        }
-        return <Tag color={color} key={tag}>{tag.toUpperCase()}</Tag>;
-      })}
-    </span>
-  ),
 }, {
   title: '操作',
   key: 'action',
   render: (text, record) => (
     <span>
-      <a href="javascript:;">Invite {record.activityName}</a>
-      <Divider type="vertical" />
       <a href="javascript:;" onClick={() => { console.log(record) }}>详情</a>
       <Divider type="vertical" />
       <a href="javascript:;" onClick={() => { console.log('delete') }}>删除</a>
@@ -47,30 +34,40 @@ const columns = [{
 
 const data = [{
   key: '1',
-  activityName: 'John Brown',
-  activityNum: 32,
-  startTime: 'New York No. 1 Lake Park',
-  endTime: ['nice', 'developer'],
+  activityName: '校园网充100送100',
+  activityNum: '12138',
+  startTime: '2019-5-10',
+  endTime: '2020-10-10',
 }, {
   key: '2',
-  activityName: 'Jim Green',
-  activityNum: 42,
-  startTime: 'London No. 1 Lake Park',
-  endTime: ['loser'],
+  activityName: '20元10GB高速流量',
+  activityNum: '09527',
+  startTime: '2019-3-17',
+  endTime: '2020-3-8',
 }, {
   key: '3',
-  activityName: 'Joe Black',
-  activityNum: 32,
-  startTime: 'Sidney No. 1 Lake Park',
-  endTime: ['cool', 'teacher'],
+  activityName: '4G飞享8元套餐',
+  activityNum: '14160',
+  startTime: '2018-5-4',
+  endTime: '2020-8-5',
 }];
+
+const rowSelection = {
+  onChange: (selectedRowKeys, selectedRows) => {
+    console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+  },
+  getCheckboxProps: record => ({
+    disabled: record.name === 'Disabled User', // Column configuration not to be checked
+    name: record.name,
+  }),
+};
 
 class activityMgt extends Component {
   render() {
     const {location} = this.props
     return (
       <div>
-        <Table columns={columns} dataSource={data}/>        
+        <Table rowSelection={rowSelection} columns={columns} dataSource={data}/>        
       </div>
     )
   }

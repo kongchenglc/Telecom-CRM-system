@@ -6,18 +6,18 @@ class enterpriseData extends Component {
     var xAxisData = [];
     var data1 = [];
     var data2 = [];
-    for (var i = 0; i < 100; i++) {
-      xAxisData.push('类目' + i);
+    for (var i = 20; i < 120; i++) {
+      xAxisData.push(i + '月');
       data1.push((Math.sin(i / 5) * (i / 5 - 10) + i / 6) * 5);
       data2.push((Math.cos(i / 5) * (i / 5 - 10) + i / 6) * 5);
     }
 
     let option = {
       title: {
-        text: '柱状图动画延迟'
+        text: '用户消费类型'
       },
       legend: {
-        data: ['bar', 'bar2'],
+        data: ['流量数据消费总值', '标准通话消费总值'],
         align: 'left'
       },
       toolbox: {
@@ -43,14 +43,14 @@ class enterpriseData extends Component {
       yAxis: {
       },
       series: [{
-        name: 'bar',
+        name: '流量数据消费总值',
         type: 'bar',
         data: data1,
         animationDelay: function (idx) {
           return idx * 10;
         }
       }, {
-        name: 'bar2',
+        name: '标准通话消费总值',
         type: 'bar',
         data: data2,
         animationDelay: function (idx) {
@@ -68,8 +68,8 @@ class enterpriseData extends Component {
   getPieOption() {
     return {
       title: {
-        text: '某站点用户访问来源',
-        subtext: '纯属虚构',
+        text: '客户数据分析',
+        subtext: '来源及其留存',
         x: 'center'
       },
       tooltip: {
@@ -79,20 +79,20 @@ class enterpriseData extends Component {
       legend: {
         orient: 'vertical',
         left: 'left',
-        data: ['直接访问', '邮件营销', '联盟广告', '视频广告', '搜索引擎']
+        data: ['保留', '待发展', '新增', '减少', '稳定']
       },
       series: [
         {
-          name: '访问来源',
+          name: '客户留存',
           type: 'pie',
           radius: '55%',
           center: ['50%', '60%'],
           data: [
-            { value: 335, name: '直接访问' },
-            { value: 310, name: '邮件营销' },
-            { value: 234, name: '联盟广告' },
-            { value: 135, name: '视频广告' },
-            { value: 1548, name: '搜索引擎' }
+            { value: 335, name: '保留' },
+            { value: 310, name: '待发展' },
+            { value: 234, name: '新增' },
+            { value: 135, name: '减少' },
+            { value: 1548, name: '稳定' }
           ],
           itemStyle: {
             emphasis: {
@@ -119,6 +119,9 @@ class enterpriseData extends Component {
           onChartReady={this.onChartReadyCallback}
         // onEvents={EventsDict}
         />
+        <br/>
+        <br/>
+        <br/>
         <ReactEcharts
           option={this.getPieOption()}
           notMerge={true}
