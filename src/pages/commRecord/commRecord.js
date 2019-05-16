@@ -1,5 +1,8 @@
 import React, { Component } from 'react'
-import { Table, Tag, Divider } from 'antd'
+import { Table, Tag, Divider, Button, Input } from 'antd'
+import styles from './commRecord.module.less'
+
+const Search = Input.Search
 
 
 const columns = [{
@@ -27,7 +30,7 @@ const columns = [{
     console.log(status)
     let color = status ? 'geekblue' : 'volcano';
     return (<span>
-      <Tag color={color} key={status}>{status?'已查看':'未查看'}</Tag>
+      <Tag color={color} key={status}>{status ? '已查看' : '未查看'}</Tag>
     </span>)
   },
 }, {
@@ -49,7 +52,7 @@ const data = [{
   user: '李诚 18829211951',
   createTime: '2019-5-10',
   status: true,
-},{
+}, {
   key: '2',
   workOrderNum: '95270',
   workOrderTitle: '移动数据速度缓慢',
@@ -73,6 +76,15 @@ class commRecord extends Component {
     const { location } = this.props
     return (
       <div>
+        <Button className='buttons' type="primary">新建</Button>
+        <Button className='buttons' type="danger">删除</Button>
+        <Search
+          placeholder="input search text"
+          enterButton="查找"
+          onSearch={value => console.log(value)}
+          className='searchInput'
+        />
+
         <Table rowSelection={rowSelection} columns={columns} dataSource={data} />
       </div>
     )

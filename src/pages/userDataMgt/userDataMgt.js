@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
 import { observer } from 'mobx-react'
-import { Table, Tag, Divider, Modal, Input } from 'antd'
+import { Table, Tag, Divider, Modal, Input, Button } from 'antd'
 import styles from './userDataMgt.module.less'
 import axios from 'axios'
 
 const confirm = Modal.confirm;
+const Search = Input.Search;
+
 
 function showDeleteConfirm() {
   confirm({
@@ -160,6 +162,15 @@ class userDataMgt extends Component {
       // </div>
 
       <div>
+        <Button className='buttons' type="primary">新建</Button>
+        <Button className='buttons' type="danger">删除</Button>
+        <Search
+          placeholder="input search text"
+          enterButton="查找"
+          onSearch={value => console.log(value)}
+          className='searchInput'
+        />
+
         <Table rowSelection={rowSelection} columns={columns} dataSource={data} />
         <a href="javascript:;" onClick={() => {
           axios({
@@ -183,7 +194,7 @@ class userDataMgt extends Component {
           onOk={this.handleOk}
           confirmLoading={confirmLoading}
           onCancel={this.handleCancel}
-          bodyStyle={{top: 10 + 'px'}}
+          bodyStyle={{ top: 10 + 'px' }}
         >
           <span className={styles.dataName}> 姓名：</span><Input value={'licheng'}></Input>
           <span className={styles.dataName}> 电话：</span><Input value={'18829211951'}></Input>

@@ -1,7 +1,8 @@
-import React, {Component} from 'react'
-import { Table, Tag, Divider } from 'antd'
+import React, { Component } from 'react'
+import { Table, Button, Divider, Input } from 'antd'
+import styles from './activityMgt.module.less'
 
-
+const Search = Input.Search
 
 const columns = [{
   title: '营销活动内容',
@@ -64,10 +65,19 @@ const rowSelection = {
 
 class activityMgt extends Component {
   render() {
-    const {location} = this.props
+    const { location } = this.props
     return (
       <div>
-        <Table rowSelection={rowSelection} columns={columns} dataSource={data}/>        
+        <Button className='buttons' type="primary">新建</Button>
+        <Button className='buttons' type="danger">删除</Button>
+        <Search
+          placeholder="input search text"
+          enterButton="查找"
+          onSearch={value => console.log(value)}
+          className='searchInput'
+        />
+
+        <Table rowSelection={rowSelection} columns={columns} dataSource={data} />
       </div>
     )
   }

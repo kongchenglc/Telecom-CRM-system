@@ -68,8 +68,8 @@ class enterpriseData extends Component {
   getPieOption() {
     return {
       title: {
-        text: '客户数据分析',
-        subtext: '来源及其留存',
+        text: '客户留存分析',
+        subtext: '近期客户留存比例',
         x: 'center'
       },
       tooltip: {
