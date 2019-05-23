@@ -1,9 +1,9 @@
-import React, {PureComponent, Fragment} from 'react'
-import {Button, Row, Form, Input, Icon} from 'antd'
+import React, { PureComponent, Fragment } from 'react'
+import { Button, Row, Form, Input, Icon } from 'antd'
 import styles from './Login.module.less'
-import {setToken} from '../../utils/tools'
-import {FormattedMessage} from 'react-intl'
-import {inject} from 'mobx-react'
+import { setToken } from '../../utils/tools'
+import { FormattedMessage } from 'react-intl'
+import { inject } from 'mobx-react'
 
 const FormItem = Form.Item
 
@@ -12,21 +12,21 @@ const FormItem = Form.Item
 class Login extends PureComponent {
   handleSubmit = (e) => {
     e.preventDefault()
-    const {form} = this.props
-    const {validateFieldsAndScroll} = form
+    const { form } = this.props
+    const { validateFieldsAndScroll } = form
     validateFieldsAndScroll(async (errors, values) => {
       if (errors) {
         return
       }
-      const result = await Api.login(values, {mock: true})
+      const result = await Api.login(values, { mock: true })
       setToken(result.token)
       this.props.history.replace('/app/dashboard')
     })
   }
 
   render() {
-    const {form} = this.props
-    const {getFieldDecorator} = form
+    const { form } = this.props
+    const { getFieldDecorator } = form
     return (
       <Fragment>
         <div className={styles.form}>
@@ -37,20 +37,26 @@ class Login extends PureComponent {
           <Form onSubmit={this.handleSubmit}>
             <FormItem hasFeedback>
               {getFieldDecorator('username', {
-                rules: [{required: true}]
+                rules: [{
+                  required: true,
+                  message: '用户名不能为空'
+                }],
               })(
                 <Input
-                  placeholder={`Username`}
+                  placeholder={`请输入用户名`}
                 />
               )}
             </FormItem>
             <FormItem hasFeedback>
               {getFieldDecorator('password', {
-                rules: [{required: true}]
+                rules: [{
+                  required: true,
+                  message: '密码不能为空'
+                }],
               })(
                 <Input
                   type='password'
-                  placeholder={`Password`}
+                  placeholder={`请输入密码`}
                 />
               )}
             </FormItem>
@@ -58,7 +64,7 @@ class Login extends PureComponent {
               <Button
                 type='primary'
                 htmlType={'submit'}>
-                <FormattedMessage id='intl.signIn'/>
+                <FormattedMessage id='intl.signIn' />
               </Button>
               {/* <p>
                 <span>Username：guest</span>
@@ -76,8 +82,8 @@ class Login extends PureComponent {
                   rel="noopener noreferrer"
                   target='_blank'
                   href='https://github.com/kongchenglc/Telecom-CRM-system'>
-                <Icon type="github"/>
-              </a>
+                  <Icon type="github" />
+                </a>
               </span>
               {/* <span
                 onClick={() => {

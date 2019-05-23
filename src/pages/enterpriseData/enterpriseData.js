@@ -4,12 +4,12 @@ import ReactEcharts from "echarts-for-react";
 class enterpriseData extends Component {
   getBarOption() {
     var xAxisData = [];
-    var data1 = [];
-    var data2 = [];
-    for (var i = 20; i < 120; i++) {
+    var data1 = [50,68,73,83,82,85,91,73,75,99];
+    var data2 = [60,55,57,49,52,44,53,44,61,53];
+    for (var i = 1; i < 12; i++) {
       xAxisData.push(i + '月');
-      data1.push((Math.sin(i / 5) * (i / 5 - 10) + i / 6) * 5);
-      data2.push((Math.cos(i / 5) * (i / 5 - 10) + i / 6) * 5);
+      // data1.push((Math.sin(i / 5) * (i / 5 - 10) + i / 6) * 5);
+      // data2.push((Math.cos(i / 5) * (i / 5 - 10) + i / 6) * 5);
     }
 
     let option = {
@@ -79,7 +79,8 @@ class enterpriseData extends Component {
       legend: {
         orient: 'vertical',
         left: 'left',
-        data: ['保留', '待发展', '新增', '减少', '稳定']
+        // data: ['保留', '待发展', '新增', '减少', '稳定'],
+        data: ['保留', '新增', '减少', '稳定']
       },
       series: [
         {
@@ -89,7 +90,7 @@ class enterpriseData extends Component {
           center: ['50%', '60%'],
           data: [
             { value: 335, name: '保留' },
-            { value: 310, name: '待发展' },
+            // { value: 310, name: '待发展' },
             { value: 234, name: '新增' },
             { value: 135, name: '减少' },
             { value: 1548, name: '稳定' }

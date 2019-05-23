@@ -25,14 +25,16 @@ function showDeleteConfirm() {
 }
 
 
-const data = [{
+const data = [
+  {
   key: '1',
   name: '李诚',
   phoneNum: '18829211951',
   address: '陕西省宝鸡市',
   payPackage: ['全球通', '流量不限量'],
   createTime: '2018-3-17',
-}, {
+}, 
+{
   key: '2',
   name: '圆圆',
   phoneNum: '18229000390',
@@ -172,7 +174,7 @@ class userDataMgt extends Component {
         />
 
         <Table rowSelection={rowSelection} columns={columns} dataSource={data} />
-        <a href="javascript:;" onClick={() => {
+        {/* <a href="javascript:;" onClick={() => {
           axios({
             method: 'post',
             url: 'http://127.0.0.1:8888/test/test',
@@ -186,7 +188,7 @@ class userDataMgt extends Component {
           }).catch(err => {
             console.log(err);
           })
-        }}>testButton</a>
+        }}>testButton</a> */}
 
         <Modal
           title="用户数据"
@@ -196,17 +198,17 @@ class userDataMgt extends Component {
           onCancel={this.handleCancel}
           bodyStyle={{ top: 10 + 'px' }}
         >
-          <span className={styles.dataName}> 姓名：</span><Input value={'licheng'}></Input>
+          <span className={styles.dataName}> 姓名：</span><Input value={'李诚'}></Input>
           <span className={styles.dataName}> 电话：</span><Input value={'18829211951'}></Input>
-          <span className={styles.dataName}> 套餐类型(已购业务)：</span><Input value={'18829211951'}></Input>
-          <span className={styles.dataName}> 入网时间：</span><Input value={'2010-3-18'}></Input>
+          <span className={styles.dataName}> 套餐类型(已购业务)：</span><Input value={'全球通；流量不限量'}></Input>
+          <span className={styles.dataName}> 入网时间：</span><Input value={'2018-3-17'}></Input>
           <span className={styles.dataName}> 已通话时间：</span><Input value={'50min'}></Input>
           <span className={styles.dataName}> 已用流量：</span><Input value={'7168MB'}></Input>
           <span className={styles.dataName}> 剩余通话时间：</span><Input value={'560min'}></Input>
           <span className={styles.dataName}> 剩余流量：</span><Input value={'13312MB'}></Input>
           <span className={styles.dataName}> 话费余额：</span><Input value={'¥52.3'}></Input>
           <span className={styles.dataName}> 客户地址：</span><Input value={'陕西省宝鸡市千阳县'}></Input>
-          <p>{ModalText}</p>
+          {/* <p>{ModalText}</p> */}
         </Modal>
       </div>
     )
