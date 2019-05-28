@@ -9,9 +9,6 @@ const route = require('./routes');
 
 const config = require('./config');
 
-// 连接
-const collent = require('./base')
-
 
 const app = new Koa();
 

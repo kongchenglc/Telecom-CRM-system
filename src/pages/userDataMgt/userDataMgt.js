@@ -4,6 +4,7 @@ import { Table, Tag, Divider, Modal, Input, Button } from 'antd'
 import styles from './userDataMgt.module.less'
 import axios from 'axios'
 
+
 const confirm = Modal.confirm;
 const Search = Input.Search;
 
@@ -11,7 +12,7 @@ const Search = Input.Search;
 function showDeleteConfirm() {
   confirm({
     title: '确定删除这条客户信息?',
-    content: '李诚 18829211951',
+    content: '李一 18829211951',
     okText: '确定',
     okType: 'danger',
     cancelText: '取消',
@@ -23,32 +24,6 @@ function showDeleteConfirm() {
     },
   });
 }
-
-
-const data = [
-  {
-  key: '1',
-  name: '李诚',
-  phoneNum: '18829211951',
-  address: '陕西省宝鸡市',
-  payPackage: ['全球通', '流量不限量'],
-  createTime: '2018-3-17',
-}, 
-{
-  key: '2',
-  name: '圆圆',
-  phoneNum: '18229000390',
-  address: '陕西省西安市',
-  payPackage: ['50GB高速流量'],
-  createTime: '2011-9-04',
-}, {
-  key: '3',
-  name: '王伟',
-  phoneNum: '18288384833',
-  address: '北京市',
-  payPackage: ['大王卡', '校园用户'],
-  createTime: '2010-3-29',
-}];
 
 const rowSelection = {
   onChange: (selectedRowKeys, selectedRows) => {
@@ -63,12 +38,60 @@ const rowSelection = {
 
 @observer
 class userDataMgt extends Component {
-
-  state = {
-    ModalText: 'Content of the modal',
-    visible: false,
-    confirmLoading: false,
+  constructor(props) {
+    super(props)
+    this.state = {
+      ModalText: 'Content of the modal',
+      visible: false,
+      confirmLoading: false,
+      usersData: [],
+      userData: {
+        name: '李诚',
+        phoneNum: '18829211951',
+        packageType: ['全球通','流量不限量'],
+        signUpTime: '2018-7-13',
+        talkedTime: '50min',
+        usedData: '7168MB',
+        lastTalkTime: '560min',
+        lastData: '13312MB',
+        balance: '¥52.3',
+        address: '陕西省宝鸡市千阳县',
+      }
+    }
   }
+
+  getUserData() {
+    const self = this
+    // console.log(this.state.testdata)
+    // this.setState({
+    //   usersData: this.state.testdata
+    // }, ()=> {
+    //   console.log(this.state.usersData)
+    // })
+    axios({
+      method: 'post',
+      url: 'http://127.0.0.1:8888/test/test',
+      data: {
+        operate: 'query'
+      }
+    }).then((result) => {
+      console.log(result)
+      const data = JSON.parse(result.data)
+      data.value.map((item, index) => {
+        item.key = index
+      })
+      self.setState({
+        usersData: data.value
+      })
+    }).catch(err => {
+      console.log(err);
+    })
+  }
+
+  componentDidMount() {
+    this.getUserData()
+  }
+  
 
   showModal = () => {
     this.setState({
@@ -90,7 +113,6 @@ class userDataMgt extends Component {
   }
 
   handleCancel = () => {
-    console.log('Clicked cancel button');
     this.setState({
       visible: false,
     });
@@ -100,8 +122,7 @@ class userDataMgt extends Component {
     const { visible, confirmLoading, ModalText } = this.state;
 
 
-    //data
-
+    //表格列
     const columns = [{
       title: '姓名',
       dataIndex: 'name',
@@ -149,8 +170,6 @@ class userDataMgt extends Component {
     }];
 
 
-
-
     return (
       // <div>
       //   <span className={`test-global ${styles.test}`}>userDataMgt</span>
@@ -164,7 +183,7 @@ class userDataMgt extends Component {
       // </div>
 
       <div>
-        <Button className='buttons' type="primary">新建</Button>
+        <Button className='buttons' type="primary" onClick={this.showModal}>新建</Button>
         <Button className='buttons' type="danger">删除</Button>
         <Search
           placeholder="input search text"
@@ -173,7 +192,7 @@ class userDataMgt extends Component {
           className='searchInput'
         />
 
-        <Table rowSelection={rowSelection} columns={columns} dataSource={data} />
+        <Table rowSelection={rowSelection} columns={columns} dataSource={this.state.usersData} />
         {/* <a href="javascript:;" onClick={() => {
           axios({
             method: 'post',
@@ -198,16 +217,16 @@ class userDataMgt extends Component {
           onCancel={this.handleCancel}
           bodyStyle={{ top: 10 + 'px' }}
         >
-          <span className={styles.dataName}> 姓名：</span><Input value={'李诚'}></Input>
-          <span className={styles.dataName}> 电话：</span><Input value={'18829211951'}></Input>
-          <span className={styles.dataName}> 套餐类型(已购业务)：</span><Input value={'全球通；流量不限量'}></Input>
-          <span className={styles.dataName}> 入网时间：</span><Input value={'2018-3-17'}></Input>
-          <span className={styles.dataName}> 已通话时间：</span><Input value={'50min'}></Input>
-          <span className={styles.dataName}> 已用流量：</span><Input value={'7168MB'}></Input>
-          <span className={styles.dataName}> 剩余通话时间：</span><Input value={'560min'}></Input>
-          <span className={styles.dataName}> 剩余流量：</span><Input value={'13312MB'}></Input>
-          <span className={styles.dataName}> 话费余额：</span><Input value={'¥52.3'}></Input>
-          <span className={styles.dataName}> 客户地址：</span><Input value={'陕西省宝鸡市千阳县'}></Input>
+          <span className={styles.dataName}> 姓名：</span><Input value={this.state.userData.name}></Input>
+          <span className={styles.dataName}> 电话：</span><Input value={this.state.userData.phoneNum}></Input>
+          <span className={styles.dataName}> 套餐类型(已购业务)：</span><Input value={this.state.userData.packageType.join(';')}></Input>
+          <span className={styles.dataName}> 入网时间：</span><Input value={this.state.userData.signUpTime}></Input>
+          <span className={styles.dataName}> 已通话时间：</span><Input value={this.state.userData.talkedTime}></Input>
+          <span className={styles.dataName}> 已用流量：</span><Input value={this.state.userData.usedData}></Input>
+          <span className={styles.dataName}> 剩余通话时间：</span><Input value={this.state.userData.lastTalkTime}></Input>
+          <span className={styles.dataName}> 剩余流量：</span><Input value={this.state.userData.lastData}></Input>
+          <span className={styles.dataName}> 话费余额：</span><Input value={this.state.userData.balance}></Input>
+          <span className={styles.dataName}> 客户地址：</span><Input value={this.state.userData.address}></Input>
           {/* <p>{ModalText}</p> */}
         </Modal>
       </div>
