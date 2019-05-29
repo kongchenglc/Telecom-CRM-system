@@ -1,13 +1,17 @@
 import React, { Component } from 'react'
 import { observer } from 'mobx-react'
-import { Table, Tag, Divider, Modal, Input, Button } from 'antd'
+import { Table, Tag, Divider, Modal, Input, Button, notification } from 'antd'
 import styles from './userDataMgt.module.less'
 import axios from 'axios'
 
-
 const confirm = Modal.confirm;
 const Search = Input.Search;
-
+const openNotificationWithIcon = (type, message, description) => {
+  notification[type]({
+    message,
+    description,
+  });
+};
 
 @observer
 class userDataMgt extends Component {
@@ -56,28 +60,27 @@ class userDataMgt extends Component {
       okType: 'danger',
       cancelText: '取消',
       onOk() {
-        self.deleteUserData(row._id);
+        self.deleteUserData(row);
       },
     });
   }
   deleteSelectsConfirm = () => {
-    let selectdIds = this.state.selectdRows.map(item => {
-      return item._id
-    })
-    const self = this;
-    confirm({
-      title: '确定删除这些客户信息?',
-      content: ``,
-      okText: '确定',
-      okType: 'danger',
-      cancelText: '取消',
-      onOk() {
-        self.setState({
-          selectedRowKeys: []
-        })
-        self.deleteUserData(...selectdIds);
-      },
-    });
+    if (this.state.selectdRows.length) {
+      const self = this;
+      confirm({
+        title: '确定删除这些客户信息?',
+        content: ``,
+        okText: '确定',
+        okType: 'danger',
+        cancelText: '取消',
+        onOk() {
+          self.setState({
+            selectedRowKeys: []
+          })
+          self.deleteUserData(...self.state.selectdRows);
+        },
+      });
+    }
   }
 
   handleOk = () => {
@@ -113,6 +116,9 @@ class userDataMgt extends Component {
         searchText: searchText
       }
     }).then((result) => {
+      // 判断空
+      result.data === 'unregistered' && (result.data = JSON.stringify([]))
+
       const data = JSON.parse(result.data)
       console.log(data)
       data.map((item, index) => {
@@ -137,9 +143,12 @@ class userDataMgt extends Component {
       }
     }).then((result) => {
       console.log(result)
+      openNotificationWithIcon('success', '新建成功！')
+      window.localStorage['num'] = parseInt(window.localStorage['num']) + 1
       self.getUserData()
     }).catch(err => {
       console.log(err);
+      openNotificationWithIcon('error', '新建失败！', '请检查网络。')
     })
   }
 
@@ -154,26 +163,30 @@ class userDataMgt extends Component {
       }
     }).then((result) => {
       console.log(result)
+      openNotificationWithIcon('success', '修改成功！')
       self.getUserData()
     }).catch(err => {
       console.log(err);
+      openNotificationWithIcon('error', '修改失败！', '请检查网络。')
     })
   }
 
-  deleteUserData = (...deleteIds) => {
+  deleteUserData = (...rows) => {
     const self = this
     axios({
       method: 'post',
       url: 'http://127.0.0.1:8888/user/userData',
       data: {
         operate: 'delete',
-        deleteIds
+        value: rows
       }
     }).then((result) => {
       console.log(result)
+      openNotificationWithIcon('success', '删除成功！')
       self.getUserData()
     }).catch(err => {
       console.log(err);
+      openNotificationWithIcon('error', '删除失败！', '请检查网络。')
     })
   }
 

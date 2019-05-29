@@ -1,77 +1,109 @@
 import React, { Component } from 'react'
 import { Table, Card, List } from 'antd'
 import styles from './dashboard.module.less'
-
-const tabListNoTitle = [{
-  key: 'userDataMgt',
-  tab: '客户相关',
-}, {
-  key: 'activityMgt',
-  tab: '营销相关',
-}, {
-  key: 'commRecord',
-  tab: '投诉相关',
-}];
-
-const ListData = {
-  userDataMgt: [
-    {
-      title: '添加新客户',
-      description: '添加了一个新的客户：18829211951'
-    },
-    {
-      title: '删除客户',
-      description: '删除了客户：15399210783'
-    },
-    {
-      title: '修改客户信息',
-      description: '修改客户信息：18229000390'
-    },
-    {
-      title: '添加新客户',
-      description: '添加了一个新的客户：13759734318'
-    },
-  ],
-  activityMgt: [
-    {
-      title: '创建营销活动',
-      description: '创建了一个新的营销活动：流量套餐推广'
-    },
-    {
-      title: '删除营销活动',
-      description: '删除营销活动：大王卡促销'
-    },
-  ],
-  commRecord: [
-    {
-      title: '添加新的投诉工单',
-      description: '添加了一个新的投诉工单，客户18829211951'
-    },
-    {
-      title: '处理投诉工单',
-      description: '处理了客户15399210783的投诉工单'
-    },
-    {
-      title: '删除投诉工单',
-      description: '删除客户18229000390的投诉工单'
-    },
-  ],
-}
-
-  ;
-
-
+import axios from 'axios'
 
 class dashboard extends Component {
   state = {
     key: 'userDataMgt',
+    ListData: {
+      userDataMgt: [],
+      activityMgt: [
+        {
+          type: 'add',
+          description: '流量套餐推广'
+        },
+        {
+          type: 'delete',
+          description: '大王卡促销'
+        },
+      ],
+      commRecord: [
+        {
+          type: 'add',
+          description: '18829211951'
+        },
+        {
+          type: 'update',
+          description: '15399210783'
+        },
+        {
+          type: 'delete',
+          description: '18229000390'
+        },
+      ],
+    },
+    dataSource: [
+      {
+        head: '本周更新',
+        key: '1',
+        newUser: `${window.localStorage['num']} 条`,
+        newActive: '0 条',
+        newComplaint: '1 条',
+        newLog: '2 条'
+      },
+      {
+        head: '本月更新',
+        key: '2',
+        newUser: `${window.localStorage['num']} 条`,
+        newActive: '2 条',
+        newComplaint: '2 条',
+        newLog: '7 条'
+      },
+      {
+        head: '本年更新',
+        key: '3',
+        newUser: `${window.localStorage['num']} 条`,
+        newActive: '2 条',
+        newComplaint: '2 条',
+        newLog: '8 条'
+      },
+    ]
   }
 
+  // react
+  componentDidMount() {
+    this.getUserdata()
+  }
+
+  // backend
+  getUserdata = () => {
+    const self = this
+    axios({
+      method: 'post',
+      url: 'http://127.0.0.1:8888/dashboard/userData',
+      data: {
+        operate: 'query',
+      }
+    }).then((result) => {
+      const data = JSON.parse(result.data)
+      const ListData = this.state.ListData
+      ListData.userDataMgt = data.value.reverse()
+      self.setState({
+        ListData
+      })
+    }).catch(err => {
+      console.log(err);
+    })
+  }
+
+  // event
   onTabChange = (key) => {
     this.setState({ key });
   }
 
   render() {
+    const tabListNoTitle = [{
+      key: 'userDataMgt',
+      tab: '客户相关',
+    }, {
+      key: 'activityMgt',
+      tab: '营销相关',
+    }, {
+      key: 'commRecord',
+      tab: '投诉相关',
+    }];
+
     const columns = [
       {
         title: '简报',
@@ -106,38 +138,28 @@ class dashboard extends Component {
       },
     ]
 
-    const dataSource = [
-      {
-        head: '本周更新',
-        key: '1',
-        newUser: '1 条',
-        newActive: '0 条',
-        newComplaint: '1 条',
-        newLog: '2 条'
+    const listTypeMessage = {
+      userDataMgt: {
+        add: ['添加新客户', '添加了一个新的客户：'],
+        delete: ['删除客户', '删除了客户：'],
+        update: ['修改客户信息', '修改客户信息：'],
       },
-      {
-        head: '本月更新',
-        key: '2',
-        newUser: '2 条',
-        newActive: '2 条',
-        newComplaint: '2 条',
-        newLog: '7 条'
+      activityMgt: {
+        add: ['创建营销活动', '创建了一个新的营销活动：'],
+        delete: ['删除营销活动', '删除营销活动：'],
+        update: ['更新营销活动', '修改了营销活动：'],
       },
-      {
-        head: '本年更新',
-        key: '3',
-        newUser: '3 条',
-        newActive: '2 条',
-        newComplaint: '2 条',
-        newLog: '8 条'
+      commRecord: {
+        add: ['添加新的投诉工单', '添加了一个新的投诉工单，客户'],
+        delete: ['删除投诉工单', '删除投诉工单，客户'],
+        update: ['处理投诉工单', '处理投诉工单，客户'],
       },
-    ]
-
+    }
 
 
     return (
       <div className={styles.mainTable}>
-        <Table columns={columns} dataSource={dataSource}
+        <Table columns={columns} dataSource={this.state.dataSource}
           pagination={false}
         ></Table>
         <br /><br /><br />
@@ -152,12 +174,21 @@ class dashboard extends Component {
         >
           <List
             itemLayout="horizontal"
-            dataSource={ListData[this.state.key]}
+            dataSource={this.state.ListData[this.state.key]}
             renderItem={item => (
               <List.Item>
                 <List.Item.Meta
-                  title={<a href="javascript:;" onClick={() => this.props.history.push(`./${this.state.key}`)}>{item.title}</a>}
-                  description={item.description}
+                  title={
+                    <a href="javascript:;"
+                      onClick={() => this.props.history.push(`./${this.state.key}`)}>
+                      {
+                        listTypeMessage[this.state.key][item.type][0]
+                      }
+                    </a>
+                  }
+                  description={
+                    listTypeMessage[this.state.key][item.type][1] + item.description
+                  }
                 />
               </List.Item>
             )}

@@ -29,6 +29,11 @@ module.exports = class extends Base {
     return this.db.get('user').insert(
       requestData.value
     ).then(data => {
+
+      // 写入记录
+      this.db.get('main').update({ name: 'user' }, { $addToSet: { value: { type: "add", description: requestData.value.phoneNum } } })
+
+      // 返回数据
       if (data.length) {
         return JSON.stringify(data);
       } else {
@@ -39,11 +44,14 @@ module.exports = class extends Base {
 
   async delete(ctx) {
     let requestData = ctx.request.body;
-    let deleteIds = requestData.deleteIds
-    deleteIds.map(deleteId => {
+    requestData.value.map(item => {
       this.db.get('user').remove({
-        _id: deleteId
+        _id: item._id
       }).then(data => {
+       
+        // 写入记录
+        this.db.get('main').update({ name: 'user' }, { $addToSet: { value: { type: "delete", description: item.phoneNum } } })
+
         if (data.length) {
           return JSON.stringify(data);
         } else {
@@ -59,6 +67,10 @@ module.exports = class extends Base {
     return this.db.get('user')
       .update({ _id: requestData.value._id }, { $set: requestData.value })
       .then(data => {
+
+        // 写入记录
+        this.db.get('main').update({ name: 'user' }, { $addToSet: { value: { type: "update", description: requestData.value.phoneNum } } })
+
         if (data.length) {
           return JSON.stringify(data);
         } else {
