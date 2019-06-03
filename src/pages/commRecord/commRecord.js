@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
-import { Table, Tag, Divider, Button, Input } from 'antd'
+import { Table, Tag, Divider, Button, Input, Modal } from 'antd'
 import styles from './commRecord.module.less'
 
 const Search = Input.Search
+const { TextArea } = Input;
 
 
 const columns = [{
@@ -72,11 +73,48 @@ const rowSelection = {
 };
 
 class commRecord extends Component {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      visible: false,
+      confirmLoading: false,
+    }
+  }
+
+  // antd
+  showModal = () => {
+    this.setState({
+      visible: true,
+    });
+  }
+
+  handleOk = () => {
+    this.setState({
+      confirmLoading: true,
+    });
+    setTimeout(() => {
+      this.setState({
+        visible: false,
+        confirmLoading: false,
+      });
+    }, 100);
+  }
+
+  handleCancel = () => {
+    this.setState({
+      visible: false,
+    });
+  }
+
+
+
+
   render() {
-    const { location } = this.props
+    const { visible, confirmLoading } = this.state;
     return (
       <div>
-        <Button className='buttons' type="primary">新建</Button>
+        <Button className='buttons' type="primary" onClick={this.showModal}>新建</Button>
         <Button className='buttons' type="danger">删除</Button>
         <Search
           placeholder="input search text"
@@ -86,6 +124,32 @@ class commRecord extends Component {
         />
 
         <Table rowSelection={rowSelection} columns={columns} dataSource={data} />
+
+
+        <Modal
+          title="工单信息"
+          visible={visible}
+          onOk={this.handleOk}
+          confirmLoading={confirmLoading}
+          onCancel={this.handleCancel}
+          bodyStyle={{ top: 10 + 'px' }}
+        >
+          <span className="dataName">工单编号：</span>
+          <Input ></Input>
+          <span className="dataName">工单标题：</span>
+          <Input ></Input>
+          <span className="dataName">客户：</span>
+          <Input ></Input>
+          <span className="dataName">工单创建时间：</span>
+          <Input ></Input>
+          <span className="dataName">状态：</span>
+          <Input ></Input>
+          <span className="dataName">沟通内容：</span>
+          <TextArea rows={4} />
+
+
+
+        </Modal>
       </div>
     )
   }

@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
-import { Table, Button, Divider, Input } from 'antd'
+import { Table, Button, Divider, Input, Modal } from 'antd'
 import styles from './activityMgt.module.less'
 
 const Search = Input.Search
+const { TextArea } = Input
 
 const columns = [{
   title: '营销活动内容',
@@ -64,11 +65,45 @@ const rowSelection = {
 };
 
 class activityMgt extends Component {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      visible: false,
+      confirmLoading: false,
+    }
+  }
+
+  // antd
+  showModal = () => {
+    this.setState({
+      visible: true,
+    });
+  }
+
+  handleOk = () => {
+    this.setState({
+      confirmLoading: true,
+    });
+    setTimeout(() => {
+      this.setState({
+        visible: false,
+        confirmLoading: false,
+      });
+    }, 100);
+  }
+
+  handleCancel = () => {
+    this.setState({
+      visible: false,
+    });
+  }
+
   render() {
-    const { location } = this.props
+    const { visible, confirmLoading } = this.state;
     return (
       <div>
-        <Button className='buttons' type="primary">新建</Button>
+        <Button className='buttons' type="primary" onClick={this.showModal}>新建</Button>
         <Button className='buttons' type="danger">删除</Button>
         <Search
           placeholder="input search text"
@@ -78,6 +113,31 @@ class activityMgt extends Component {
         />
 
         <Table rowSelection={rowSelection} columns={columns} dataSource={data} />
+
+        <Modal
+          title="活动信息"
+          visible={visible}
+          onOk={this.handleOk}
+          confirmLoading={confirmLoading}
+          onCancel={this.handleCancel}
+          bodyStyle={{ top: 10 + 'px' }}
+        >
+          <span className="dataName"> 营销活动内容: </span>
+          <Input ></Input>
+
+          <span className="dataName"> 营销活动编号: </span>
+          <Input ></Input>
+
+          <span className="dataName"> 开始时间: </span>
+          <Input ></Input>
+
+          <span className="dataName"> 结束时间: </span>
+          <Input ></Input>
+
+          <span className="dataName"> 活动内容: </span>
+          <TextArea rows={4} />
+
+        </Modal>
       </div>
     )
   }
